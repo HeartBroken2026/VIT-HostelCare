@@ -1,3 +1,5 @@
+![CI](https://github.com/HeartBroken2026/VIT-HostelCare/actions/workflows/ci.yml/badge.svg)
+
 # 🏨 Hostel Complaint Management System 🚀
 
 A full-stack web application for managing hostel complaints with role-based access, built using React / Next.js, Tailwind CSS, and Supabase.
