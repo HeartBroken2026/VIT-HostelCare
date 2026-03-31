@@ -2,7 +2,7 @@
 
 A full-stack web application for managing hostel complaints with role-based access, built using React / Next.js, Tailwind CSS, and Supabase.
 
-The project introduces a Next.js backend layer while keeping the existing database and business logic unchanged.
+This project uses Next.js, Supabase and TypeScript to streamline hostel complaint management at VIT.
 
 ---
 
