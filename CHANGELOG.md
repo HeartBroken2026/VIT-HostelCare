@@ -1,3 +1,11 @@
+# [1.1.0](https://github.com/HeartBroken2026/VIT-HostelCare/compare/v1.0.0...v1.1.0) (2026-04-03)
+
+
+### Features
+
+* add priority-based complaint sorting structure (closes [#7](https://github.com/HeartBroken2026/VIT-HostelCare/issues/7)) ([a39cf8c](https://github.com/HeartBroken2026/VIT-HostelCare/commit/a39cf8c73af91022b65721603cf23064994c9ee2))
+* add semantic-release for automated versioning and changelog ([032d3a5](https://github.com/HeartBroken2026/VIT-HostelCare/commit/032d3a54c03889db916cb16cb14fbda8443ff7fc))
+
 # Changelog
 ## VIT HostelCare — Hostel Complaint Management System
 
