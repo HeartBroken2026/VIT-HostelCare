@@ -30,3 +30,6 @@ jobs:
 
       - name: Build project
         run: npm run build
+
+      - name: Run tests
+        run: npx vitest run --config vitest.simple.config.ts
