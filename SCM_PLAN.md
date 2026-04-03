@@ -1,9 +1,9 @@
 # Software Configuration Management Plan
 ## VIT HostelCare — Hostel Complaint Management System
 
-**Version:** 1.0.0  
+**Version:** 1.1.0  
 **Author:** Prince Kumar  
-**Date:** March 2026  
+**Date:** April 2026  
 **Tech Stack:** Next.js 16, TypeScript, Tailwind CSS, Supabase
 
 ---
@@ -16,24 +16,37 @@ SCM is the discipline of tracking and controlling changes in software. It ensure
 
 ---
 
-## 2. SCM Tools Overview and Comparison
+## 2. SCM Tools Used
 
-The following tools were evaluated for this project across different SCM categories.
+This project uses the following tools across all SCM categories:
 
-### 2.1 Version Control Systems
+| Category | Tool Used | Purpose |
+|---|---|---|
+| Version Control | Git | Branching, merging, conflict resolution, tagging |
+| Remote Hosting | GitHub | Remote repository, Pull Requests, network graph |
+| Issue Tracking | GitHub Issues | Task management, bug tracking, feature requests |
+| CI/CD | GitHub Actions | Automated build and test pipeline on every push |
+| Automated Testing | Vitest | Unit tests running in the CI pipeline |
+| Release Automation | Semantic Release | Auto versioning, changelog generation, GitHub Releases |
+
+---
+
+## 3. SCM Tools Overview and Comparison
+
+### 3.1 Version Control Systems
 
 | Tool | Type | Key Characteristics | Used? |
 |---|---|---|---|
 | **Git** | Distributed | Every developer has full history; supports branching, merging, tagging | Yes |
 | SVN (Subversion) | Centralized | Single central server; simpler but no offline commits | No |
-| Mercurial | Distributed | Similar to Git; used by Facebook historically but now largely replaced by Git | No |
+| Mercurial | Distributed | Similar to Git; used by Facebook historically but now largely replaced | No |
 | Perforce (Helix Core) | Centralized | Industry standard for game development; handles large binary files well | No |
 
 **Justification for Git:** Git was chosen because it is the industry standard for distributed version control. It supports parallel development through branching, allows offline commits, and integrates seamlessly with GitHub. Its widespread adoption means extensive documentation and tooling support.
 
 ---
 
-### 2.2 Remote Hosting Platforms
+### 3.2 Remote Hosting Platforms
 
 | Tool | Key Characteristics | Used? |
 |---|---|---|
@@ -46,7 +59,7 @@ The following tools were evaluated for this project across different SCM categor
 
 ---
 
-### 2.3 Issue Tracking
+### 3.3 Issue Tracking
 
 | Tool | Key Characteristics | Used? |
 |---|---|---|
@@ -55,11 +68,22 @@ The following tools were evaluated for this project across different SCM categor
 | Trello | Kanban-style; visual and simple | No |
 | Linear | Modern, fast issue tracker popular with startups | No |
 
-**Justification for GitHub Issues:** Since the project is hosted on GitHub, GitHub Issues was the natural choice. It allows issues to be referenced directly in commit messages (e.g. `fixes #1`) and closed automatically on merge, creating a clear audit trail between tasks and code changes.
+**Justification for GitHub Issues:** Since the project is hosted on GitHub, GitHub Issues was the natural choice. It allows issues to be referenced directly in commit messages (e.g. `closes #7`) and closed automatically on merge, creating a clear audit trail between tasks and code changes.
+
+### Issues Tracked
+
+| Issue | Title | Status |
+|---|---|---|
+| #4 | Add image upload support for complaint evidence | Open |
+| #5 | Implement email notifications for status updates | Open |
+| #6 | Add analytics dashboard for admin | Open |
+| #7 | Priority-based complaint sorting | Closed via commit |
+
+Issue #7 was closed automatically when the commit `feat: add priority-based complaint sorting structure (closes #7)` was merged into `main` — demonstrating Git + GitHub Issues integration.
 
 ---
 
-### 2.4 CI/CD Tools
+### 3.4 CI/CD Tools
 
 | Tool | Key Characteristics | Used? |
 |---|---|---|
@@ -72,36 +96,67 @@ The following tools were evaluated for this project across different SCM categor
 
 ---
 
-### 2.5 Artifact Management
+### 3.5 Automated Testing
 
 | Tool | Key Characteristics | Used? |
 |---|---|---|
-| JFrog Artifactory | Enterprise artifact repository for binaries and packages | No |
-| Nexus Repository | Open-source artifact manager widely used in Java ecosystems | No |
-| GitHub Releases | Lightweight release tagging built into GitHub | Yes |
+| **Vitest** | Fast, modern test runner built for Vite/Next.js projects | Yes |
+| Jest | Most popular JS test runner; slightly slower than Vitest | No |
+| Cypress | End-to-end browser testing | No |
+| Playwright | Cross-browser end-to-end testing by Microsoft | No |
 
-**Justification:** For a web application of this scale, full artifact management tools like JFrog or Nexus are unnecessary. GitHub Releases provides sufficient versioning and release documentation capability.
+**Justification for Vitest:** Vitest was already configured in the project (`vitest.config.ts`) making it the natural choice. It is fast, modern, and integrates directly into the CI pipeline via GitHub Actions.
+
+### Tests Written
+
+```
+src/__tests__/hostelcare.test.ts
+
+✓ should validate complaint status transitions
+✓ should validate user roles
+✓ should validate complaint object has required fields
+
+3 tests passing
+```
 
 ---
 
-## 3. Repository Structure
+### 3.6 Release Automation
+
+| Tool | Key Characteristics | Used? |
+|---|---|---|
+| **Semantic Release** | Reads commit messages; auto bumps version; generates changelog | Yes |
+| Standard Version | Similar to semantic-release but manual trigger | No |
+| Release Please | Google's release automation tool for GitHub | No |
+| Manual tagging | `git tag -a v1.0.0` — fully manual | Used initially |
+
+**Justification for Semantic Release:** Semantic Release automates the entire release process by reading Conventional Commit messages and determining the next version number automatically. A `feat:` commit triggers a minor version bump, a `fix:` triggers a patch bump, and a breaking change triggers a major bump. This eliminates human error in versioning and ensures the changelog is always accurate and up to date.
+
+---
+
+## 4. Repository Structure
 
 ```
 VIT-HostelCare/
 ├── .github/
 │   └── workflows/
-│       └── ci.yml          # GitHub Actions CI pipeline
-├── public/                 # Static assets
-├── src/                    # Application source code
-│   ├── STUDENT_MODULE.md   # Student module documentation
-│   ├── ADMIN_MODULE.md     # Admin module documentation
-│   └── WORKER_MODULE.md    # Worker module documentation
-├── supabase/               # Supabase schema and migrations
-│   └── SCHEMA_NOTES.md     # Database schema documentation
+│       └── ci.yml              # GitHub Actions CI + Release pipeline
+├── public/                     # Static assets
+├── src/
+│   ├── __tests__/
+│   │   └── hostelcare.test.ts  # Vitest unit tests
+│   ├── STUDENT_MODULE.md
+│   ├── ADMIN_MODULE.md
+│   ├── WORKER_MODULE.md
+│   └── PRIORITY_SORTING.md
+├── supabase/
+│   └── SCHEMA_NOTES.md
+├── .releaserc.json             # Semantic Release configuration
 ├── .gitignore
-├── CHANGELOG.md            # Version history
-├── README.md               # Project overview
-├── SCM_PLAN.md             # This document
+├── CHANGELOG.md                # Auto-generated by Semantic Release
+├── README.md                   # CI badge + project overview
+├── SCM_PLAN.md                 # This document
+├── vitest.simple.config.ts     # Vitest config for CI
 ├── next.config.mjs
 ├── package.json
 └── tsconfig.json
@@ -109,11 +164,11 @@ VIT-HostelCare/
 
 ---
 
-## 4. Branching Strategy
+## 5. Branching Strategy
 
 This project follows a **Feature Branch Workflow** — all new features and fixes are developed in dedicated branches and merged into `main` via Pull Requests.
 
-### 4.1 Branch Naming Convention
+### 5.1 Branch Naming Convention
 
 | Branch Type | Pattern | Example |
 |---|---|---|
@@ -122,7 +177,7 @@ This project follows a **Feature Branch Workflow** — all new features and fixe
 | Hotfix | `hotfix/<description>` | `hotfix/auth-null-pointer` |
 | Release | `release/<version>` | `release/v1.0.0` |
 
-### 4.2 Branches Created
+### 5.2 Branches Created
 
 | Branch | Purpose | Status |
 |---|---|---|
@@ -131,51 +186,55 @@ This project follows a **Feature Branch Workflow** — all new features and fixe
 | `feature/admin-dashboard` | Admin complaint management and worker assignment | Merged |
 | `feature/worker-dashboard` | Worker view for assigned complaints | Merged |
 | `feature/supabase-schema` | Supabase database schema documentation | Merged |
+| `feature/priority-sorting` | Priority-based complaint sorting (closes #7) | Merged |
+| `feature/vitest-tests` | Vitest unit tests setup | Merged |
 
-### 4.3 Branch Protection Rules
+### 5.3 Branch Protection Rules
 
 - No direct commits to `main`
 - All changes go through Pull Requests
-- At least one review before merge
 - CI pipeline must pass before merge is allowed
 
 ---
 
-## 5. Commit Message Convention
+## 6. Commit Message Convention
 
-This project follows the **Conventional Commits** specification for all commit messages.
+This project follows the **Conventional Commits** specification. Semantic Release depends on this to determine version bumps automatically.
 
 ### Format
 ```
 <type>: <short description>
 ```
 
-### Types
+### Types and Version Impact
 
-| Type | Purpose | Example |
+| Type | Purpose | Version bump |
 |---|---|---|
-| `feat` | New feature | `feat: add student complaint submission form` |
-| `fix` | Bug fix | `fix: resolve merge conflict in README` |
-| `docs` | Documentation changes | `docs: update project description in README` |
-| `ci` | CI/CD configuration | `ci: add GitHub Actions workflow` |
-| `refactor` | Code refactoring | `refactor: simplify complaint status logic` |
-| `chore` | Maintenance tasks | `chore: update dependencies` |
+| `feat` | New feature | Minor (1.0.0 → 1.1.0) |
+| `fix` | Bug fix | Patch (1.0.0 → 1.0.1) |
+| `docs` | Documentation | No bump |
+| `ci` | CI/CD configuration | No bump |
+| `test` | Adding tests | No bump |
+| `chore` | Maintenance | No bump |
+| `BREAKING CHANGE` | Breaking API change | Major (1.0.0 → 2.0.0) |
 
-### Commit History (Key Commits)
+### Key Commits
 
-| Commit | Message | Branch |
-|---|---|---|
-| `48f20e2` | first commit | main |
-| `25b320a` | feat: add student complaint submission and status tracking | feature/student-dashboard |
-| `afddca9` | feat: add admin dashboard for complaint management and worker assignment | feature/admin-dashboard |
-| `e135a46` | feat: add worker dashboard for assigned complaints and resolution updates | feature/worker-dashboard |
-| `082cbeb` | fix: resolve merge conflict between main and feature/student-dashboard | main |
-| `35cd159` | Merge pull requests from all feature branches | main |
-| `f7096c9` | ci: add GitHub Actions workflow for lint, typecheck and build | main |
+| Commit | Message |
+|---|---|
+| `48f20e2` | first commit |
+| `25b320a` | feat: add student complaint submission and status tracking |
+| `afddca9` | feat: add admin dashboard for complaint management and worker assignment |
+| `e135a46` | feat: add worker dashboard for assigned complaints and resolution updates |
+| `082cbeb` | fix: resolve merge conflict between main and feature/student-dashboard |
+| `f7096c9` | ci: add GitHub Actions workflow for lint, typecheck and build |
+| various | feat: add priority-based complaint sorting structure (closes #7) |
+| various | test: add unit tests for complaint status, roles and validation |
+| various | feat: add semantic-release for automated versioning and changelog |
 
 ---
 
-## 6. Merge Conflict Resolution
+## 7. Merge Conflict Resolution
 
 During development, a deliberate merge conflict was introduced and resolved to demonstrate the conflict resolution process.
 
@@ -194,14 +253,15 @@ Built with Next.js and Supabase, this system enables students to submit and trac
 ### Resolution
 Both changes were combined into a single coherent description:
 ```
-This project uses Next.js, Supabase and TypeScript to streamline hostel complaint management at VIT, enabling students to submit and track complaints in real time.
+This project uses Next.js, Supabase and TypeScript to streamline hostel complaint
+management at VIT, enabling students to submit and track complaints in real time.
 ```
 
 The resolved file was staged, committed with message `fix: resolve merge conflict between main and feature/student-dashboard`, and pushed to `main`.
 
 ---
 
-## 7. Versioning Policy
+## 8. Versioning Policy
 
 This project follows **Semantic Versioning (SemVer)**: `MAJOR.MINOR.PATCH`
 
@@ -211,45 +271,59 @@ This project follows **Semantic Versioning (SemVer)**: `MAJOR.MINOR.PATCH`
 | MINOR | New features, backward compatible | Adding notifications module |
 | PATCH | Bug fixes | Fixing a form validation error |
 
+Versions are managed automatically by **Semantic Release** — no manual tagging required after the initial setup. Every push to `main` with a `feat:` or `fix:` commit triggers a new release automatically.
+
 ### Releases
 
-| Tag | Description | Date |
+| Tag | Description | How created |
 |---|---|---|
-| `v1.0.0` | Initial release — student, admin, worker dashboards with Supabase integration | March 2026 |
-
-Tags are created using annotated Git tags and published as GitHub Releases with full release notes.
-
----
-
-## 8. CI/CD Pipeline
-
-A GitHub Actions workflow was configured at `.github/workflows/ci.yml` to automatically run on every push to `main` or any `feature/*` branch, and on every Pull Request targeting `main`.
-
-### Pipeline Steps
-
-```
-git push / pull request
-        ↓
-Checkout code (actions/checkout@v4)
-        ↓
-Setup Node.js 22 (actions/setup-node@v4)
-        ↓
-Install dependencies (npm install)
-        ↓
-Build project (npm run build)
-        ↓
-Pass ✅ / Fail ❌
-```
-
-### Benefits
-- Catches build errors before they reach `main`
-- Every PR is validated automatically
-- Build status badge visible on repository homepage
-- Zero additional infrastructure required
+| `v1.0.0` | Initial release — all dashboards with Supabase | Manual `git tag` |
+| subsequent | Auto-generated by Semantic Release | Automatic on push to main |
 
 ---
 
-## 9. .gitignore Configuration
+## 9. CI/CD Pipeline
+
+A GitHub Actions workflow is configured at `.github/workflows/ci.yml` with two jobs — **build** and **release**.
+
+### Pipeline Flow
+
+```
+git push to main / pull request
+            ↓
+        [ build job ]
+            ↓
+  Checkout code (actions/checkout@v4)
+            ↓
+  Setup Node.js 22
+            ↓
+  Install dependencies (npm install)
+            ↓
+  Run Vitest unit tests (3 tests)
+            ↓
+  Build project (npm run build)
+            ↓
+     Pass ✅ / Fail ❌
+            ↓ (only if push to main and build passes)
+       [ release job ]
+            ↓
+  Semantic Release reads commit messages
+            ↓
+  Bumps version in package.json
+            ↓
+  Updates CHANGELOG.md
+            ↓
+  Creates GitHub Release with release notes
+```
+
+### Triggers
+- Every push to `main` — runs both build and release jobs
+- Every push to `feature/*` — runs build job only
+- Every Pull Request to `main` — runs build job only
+
+---
+
+## 10. .gitignore Configuration
 
 The following are excluded from version control:
 
@@ -265,15 +339,15 @@ Sensitive credentials (Supabase URL, API keys) are never committed to the reposi
 
 ---
 
-## 10. Summary
+## 11. Summary
 
-This project demonstrates a complete SCM workflow using industry-standard tools:
+This project demonstrates a complete, production-grade SCM workflow using six industry-standard tools working together:
 
-- **Git** for distributed version control with feature branching
-- **GitHub** for remote hosting, Pull Requests, Issues, and Releases
-- **GitHub Actions** for automated CI/CD on every push
-- **Conventional Commits** for a clean, readable commit history
-- **Semantic Versioning** for structured release management
-- **GitHub Issues** for lightweight task and bug tracking
+- **Git** — distributed version control with feature branching and conflict resolution
+- **GitHub** — remote hosting with Pull Requests, network graph, and Releases
+- **GitHub Issues** — lightweight task tracking with automatic closure via commit messages
+- **GitHub Actions** — automated CI/CD pipeline running on every push
+- **Vitest** — automated unit testing integrated into the CI pipeline
+- **Semantic Release** — fully automated versioning, changelog generation, and GitHub Releases
 
-The combination of these tools provides full traceability from task → branch → commit → pull request → release, which is the core goal of any SCM process.
+The result is full traceability from task → branch → commit → pull request → test → build → release, which is the core goal of any SCM process.
