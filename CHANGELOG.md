@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/HeartBroken2026/VIT-HostelCare/compare/v1.1.0...v1.1.1) (2026-04-08)
+
+
+### Bug Fixes
+
+* prince chaman hai ([b2fb4c8](https://github.com/HeartBroken2026/VIT-HostelCare/commit/b2fb4c8f2139ba13057453c9fd15c21a8577f14b))
+
 # [1.1.0](https://github.com/HeartBroken2026/VIT-HostelCare/compare/v1.0.0...v1.1.0) (2026-04-03)
 
 
